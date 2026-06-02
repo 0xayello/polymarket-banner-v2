@@ -640,6 +640,9 @@ function parseMarket(m, eventTitle, eventImage){
     if(!cat) return null;
     const volume=parseFloat(m.volume||m.volumeNum||0);
     if(volume<50000) return null;
+    // Descartar mercados já expirados
+    const endDate=m.endDate||m.end_date_iso||m.endDateIso||null;
+    if(endDate && new Date(endDate)<new Date()) return null;
     const outs=Array.isArray(m.outcomes)?m.outcomes:JSON.parse(m.outcomes||"[]");
     const prices=Array.isArray(m.outcomePrices)?m.outcomePrices:JSON.parse(m.outcomePrices||"[]");
     if(outs.length<2||prices.length<2) return null;
